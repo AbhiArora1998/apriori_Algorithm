@@ -1,0 +1,69 @@
+import time
+from tracemalloc import start 
+
+from functions import test, minimumSupport,get__allItems_with_first_count,get_frequent,joinItemset
+
+class Apriori: 
+    Transactions = []
+    c={}
+    l={}
+    discarded_transactions={} 
+    supportCount  = {}
+    totalSize=1
+
+    print('hello I am alive')
+
+    # reading the trasactions
+    Transactions,totalRows=test('connect.txt')
+    # print(Transactions)
+    
+    #  counting the minimum threshold 
+    threshold = minimumSupport(totalRows)
+    print(threshold)
+
+    # receives the first C1 transaction
+    sortedOrder = sorted(get__allItems_with_first_count(Transactions))
+    # print(sortedOrder,'here is sorted order')
+
+    
+    c.update({1 : [[item] for item in sortedOrder] })
+    discarded_transactions.update({1:[]})
+
+    start = time.time()
+
+    receivedL,receiveditemCount,receivedDiscarededValue  =  get_frequent(c[1],Transactions,threshold,discarded_transactions)
+    l.update({1:receivedL})
+    supportCount.update({1:receiveditemCount})
+    discarded_transactions.update({1:receivedDiscarededValue})
+
+    totalSize = 1 + totalSize
+    noMoreItems = False
+    while noMoreItems == False:
+        joinedSet = joinItemset(l[totalSize-1],sortedOrder)
+        c.update({totalSize:joinedSet})
+        receivedL,receiveditemCount,receivedDiscarededValue = get_frequent(c[totalSize],Transactions,threshold,discarded_transactions)
+        discarded_transactions.update({totalSize:receivedDiscarededValue})
+        supportCount.update({totalSize:receiveditemCount})
+        if len(receivedL) <1:
+            noMoreItems = True
+        else: 
+            l.update({totalSize:receivedL})
+            totalSize = totalSize+1 
+    totalSize = 0   
+    
+    end = time.time()
+
+    from contextlib import redirect_stdout
+
+    with open('out.txt', 'w') as f:
+        with redirect_stdout(f):
+         
+             for index in range(1, len(l.keys())+1):
+                print(str(l[index]))
+                totalSize = totalSize + len(l[index])
+             print('FPS:',totalSize)
+             print('Time', end-start)
+
+
+
+    
