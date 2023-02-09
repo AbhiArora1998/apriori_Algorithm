@@ -1,5 +1,6 @@
 import time
 from tracemalloc import start 
+import numpy as np
 
 from functions import test, minimumSupport,get__allItems_with_first_count,get_frequent,joinItemset
 
@@ -20,18 +21,18 @@ class Apriori:
     #  counting the minimum threshold 
     threshold = minimumSupport(totalRows)
     print(threshold)
+    start = time.time()
 
-    # receives the first C1 transaction
-    sortedOrder = sorted(get__allItems_with_first_count(Transactions))
-    # print(sortedOrder,'here is sorted order')
-
-    
+    # received all the unique transactions
+    sortedOrder = sorted(get__allItems_with_first_count(Transactions),key=int)
+    # print(sortedOrder)
     c.update({1 : [[item] for item in sortedOrder] })
     discarded_transactions.update({1:[]})
 
-    start = time.time()
 
+    # Check and count the values for the first time
     receivedL,receiveditemCount,receivedDiscarededValue  =  get_frequent(c[1],Transactions,threshold,discarded_transactions)
+    
     l.update({1:receivedL})
     supportCount.update({1:receiveditemCount})
     discarded_transactions.update({1:receivedDiscarededValue})
@@ -40,7 +41,9 @@ class Apriori:
     noMoreItems = False
     while noMoreItems == False:
         joinedSet = joinItemset(l[totalSize-1],sortedOrder)
+       
         c.update({totalSize:joinedSet})
+        print(joinedSet)
         receivedL,receiveditemCount,receivedDiscarededValue = get_frequent(c[totalSize],Transactions,threshold,discarded_transactions)
         discarded_transactions.update({totalSize:receivedDiscarededValue})
         supportCount.update({totalSize:receiveditemCount})

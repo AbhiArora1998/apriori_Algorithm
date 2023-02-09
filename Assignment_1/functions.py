@@ -21,9 +21,8 @@ def test(dataPath):
             updatedFile = updatedFile[2]
             updatedFile = updatedFile.replace('\n','')
             updatedFile = updatedFile.split()
-            # print(updatedFile)
             resultedFile.append(updatedFile)
-
+            # print(updatedFile)
     return resultedFile, totalRows
 
 def minimumSupport(totalRows):
@@ -44,7 +43,8 @@ def get__allItems_with_first_count(Transactions):
     
 
     totalItems=dict(totalItems)
-    return list(totalItems.keys())
+    totalItems = list(totalItems.keys())
+    return totalItems
 
 def count_item(singleItemSet, Transactions):
     counter = 0
@@ -57,12 +57,9 @@ def get_frequent(itemSet, initialTransactions, threshold,discarded_transactions)
     tempL = []
     newDiscardedValue = []
     itemCount = []
-    # First need to check if the itemset contains subset of items that was previously discarded
     for i in range(len(itemSet)):
         isDiscarded = False
-        # if lenght of discarded items is not 0
         if len(discarded_transactions.keys()) > 0:
-            # this loop checks if there is any value in the item that was discarded before 
             for k in discarded_transactions[len(discarded_transactions.keys())]:
                 
                 if set(k).issubset(set(itemSet[i])):
@@ -79,13 +76,17 @@ def get_frequent(itemSet, initialTransactions, threshold,discarded_transactions)
     return tempL,itemCount,newDiscardedValue
 
 def join_two_itemsets(firstItem,secondItem,sortedOrder):
-    firstItem.sort(key=lambda y: sortedOrder.index(y))
-    secondItem.sort(key=lambda j: sortedOrder.index(j))
+    # firstItem.sort(key=lambda y: sortedOrder.index(y))
+    # secondItem.sort(key=lambda j: sortedOrder.index(j))
 
     for i in range(len(firstItem)):
+        # print(firstItem[i],secondItem[i],'comparing')
         if firstItem[i] == secondItem[i]:
             return []
+    # print(sortedOrder.index(firstItem[-1]), sortedOrder.index(secondItem[-1]),sortedOrder.index(firstItem[-1])< sortedOrder.index(secondItem[-1]))
     if sortedOrder.index(firstItem[-1]) < sortedOrder.index(secondItem[-1]):
+            
+            # print(firstItem + [secondItem[-1]],'joining')
             return firstItem + [secondItem[-1]]
 
     return []
@@ -94,10 +95,13 @@ def joinItemset(items,initialItem):
     tempC = []
     for i in range(len(items)-1):
         for j in range(i+1,len(items)):
-
+            # print('sending',items[i],items[j],initialItem)
             itOut = join_two_itemsets(items[i],items[j],initialItem)
-            if len (itOut)>0:
+            if len(itOut)>0 and itOut not in tempC:
+
                 tempC.append(itOut)
+
+    # print('getting out ')
     return tempC
             
         
