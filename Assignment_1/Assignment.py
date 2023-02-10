@@ -13,7 +13,7 @@ class Apriori:
     totalSize=1
 
     print('hello I am alive')
-
+    print('Please wait...')
     # reading the trasactions
     Transactions,totalRows=test('connect.txt')
     # print(Transactions)
@@ -40,15 +40,18 @@ class Apriori:
     totalSize = 1 + totalSize
     noMoreItems = False
     while noMoreItems == False:
+        print('Almost there :)')
+
         joinedSet = joinItemset(l[totalSize-1],sortedOrder)
        
         c.update({totalSize:joinedSet})
-        print(joinedSet)
         receivedL,receiveditemCount,receivedDiscarededValue = get_frequent(c[totalSize],Transactions,threshold,discarded_transactions)
         discarded_transactions.update({totalSize:receivedDiscarededValue})
         supportCount.update({totalSize:receiveditemCount})
+
         if len(receivedL) <1:
             noMoreItems = True
+            print('Thanks for your patience')
         else: 
             l.update({totalSize:receivedL})
             totalSize = totalSize+1 

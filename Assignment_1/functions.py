@@ -26,7 +26,7 @@ def test(dataPath):
     return resultedFile, totalRows
 
 def minimumSupport(totalRows):
-    minimum_confidence_percent = 97
+    minimum_confidence_percent = 96
     return (int(totalRows)*minimum_confidence_percent)/100
 
 def get__allItems_with_first_count(Transactions):
