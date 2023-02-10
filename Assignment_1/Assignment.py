@@ -1,26 +1,32 @@
 import time
-from tracemalloc import start 
 import numpy as np
+import sys
+import os
 
 from functions import test, minimumSupport,get__allItems_with_first_count,get_frequent,joinItemset
 
 class Apriori: 
+    
+    initialiZations=sys.argv
+    fileName = initialiZations[1]
+    initalPercentage = int(initialiZations[2])
     Transactions = []
     c={}
     l={}
     discarded_transactions={} 
     supportCount  = {}
     totalSize=1
-
+    directoryName = os.getcwd() + '/'+ fileName  
+    directoryName = directoryName.replace("\\",'/') 
+    print()
     print('hello I am alive')
     print('Please wait...')
     # reading the trasactions
-    Transactions,totalRows=test('connect.txt')
-    # print(Transactions)
+    Transactions,totalRows=test(directoryName)
     
     #  counting the minimum threshold 
-    threshold = minimumSupport(totalRows)
-    print(threshold)
+    threshold = minimumSupport(totalRows,initalPercentage)
+    print('Minimum_Support',threshold)
     start = time.time()
 
     # received all the unique transactions

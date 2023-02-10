@@ -2,10 +2,11 @@ from turtle import update
 
 
 def test(dataPath):
+
     resultedFile= []
     totalRows = 0
-    
-    with open('C:/Users/aarora/Desktop/Delete this folder/AprioriPython/apriori_Algorithm/'+dataPath) as f: 
+    print(dataPath)
+    with open(dataPath) as f: 
         lines = f.readlines()
 
 
@@ -25,8 +26,8 @@ def test(dataPath):
             # print(updatedFile)
     return resultedFile, totalRows
 
-def minimumSupport(totalRows):
-    minimum_confidence_percent = 96
+def minimumSupport(totalRows,percentage):
+    minimum_confidence_percent = percentage
     return (int(totalRows)*minimum_confidence_percent)/100
 
 def get__allItems_with_first_count(Transactions):
